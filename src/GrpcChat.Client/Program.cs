@@ -62,7 +62,7 @@ namespace GrpcChat.Client
         {
             do
             {
-                await Task.Delay(100);
+                await Task.Delay(25);
 
                 var request = new ChatMessage
                 {
