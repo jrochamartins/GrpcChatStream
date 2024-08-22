@@ -1,0 +1,17 @@
+﻿using ProtoBuf.Grpc.Configuration;
+
+namespace GrpcChat.Shared
+{
+    [Service]
+    public interface IChatService
+    {
+        IAsyncEnumerable<ChatMessage?> UserJoin(User user,
+            CancellationToken cancelationToken = default);
+
+        Task UserInteract(IAsyncEnumerable<ChatMessage> messages,
+           CancellationToken cancelationToken = default);
+
+        Task UserDisconect(User user,
+           CancellationToken cancelationToken = default);
+    }
+}
