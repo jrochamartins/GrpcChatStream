@@ -8,18 +8,20 @@ namespace GrpcChat.Shared
         [ProtoMember(1)]
         public string? Username { get; set; }
 
-        public override string Render() => 
-            $"{Username}: {base.Render()}";
+        public string Render() =>
+            $"[{Created:HH:mm:ss}] {Username}: {Content}";
     }
 
     [ProtoContract]
     [ProtoInclude(2, typeof(ChatMessage))]
-    public class Message
+    public class Message : Entry
     {
         [ProtoMember(1)]
         public string? Content { get; set; }
+    }
 
-        public virtual string Render() => 
-            $"{Content}";
+    public class Entry
+    {
+        public DateTime Created { get; } = DateTime.Now;
     }
 }

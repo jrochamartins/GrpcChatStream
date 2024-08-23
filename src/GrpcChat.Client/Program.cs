@@ -70,7 +70,7 @@ namespace GrpcChat.Client
                     Content = Console.ReadLine()
                 };
 
-                PreviewSentMessage(request.Content);
+                PreviewSentMessage(request);
 
                 if (request.Content?.Trim().ToLower() == "sair")
                     yield break;
@@ -79,12 +79,11 @@ namespace GrpcChat.Client
             } while (true);
         }
 
-        private static void PreviewSentMessage(string? message)
+        private static void PreviewSentMessage(ChatMessage? message)
         {
             if (Console.CursorTop == 0) return;
             Console.SetCursorPosition(0, Console.CursorTop - 1);
-            if (!string.IsNullOrEmpty(message))
-                Console.WriteLine($"You: {message}");
+            Console.WriteLine(message?.Render());
         }
     }
 }
