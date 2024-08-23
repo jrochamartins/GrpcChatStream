@@ -11,7 +11,7 @@ namespace GrpcChat.Shared
         Task UserInteract(IAsyncEnumerable<Message> messages,
            CancellationToken cancelationToken = default);
 
-        Task UserDisconect(User user,
+        ValueTask UserDisconect(User user,
            CancellationToken cancelationToken = default);
     }
 }

@@ -28,7 +28,7 @@ namespace GrpcChat.Client
         {
             var defaultColor = Console.ForegroundColor;
             Console.ForegroundColor = message?.Username == "Server" ? ConsoleColor.Yellow : ConsoleColor.Green;
-            Console.WriteLine($"{message?.Username}: {message?.Content}");
+            Console.WriteLine(message?.Render());
             Console.ForegroundColor = defaultColor;
         }
 

@@ -28,7 +28,7 @@ namespace GrpcChat.Server.Services
             }
         }
 
-        public async Task UserDisconect(User user, CancellationToken cancelationToken = default)
+        public async ValueTask UserDisconect(User user, CancellationToken cancelationToken = default)
         {
             await Task.Run(() => chatRoom.EndTransmission(user.Username), cancelationToken);
         }
