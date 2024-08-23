@@ -8,10 +8,11 @@ namespace GrpcChat.Client
     {
         public static async Task Main()
         {
-            var channel = GrpcChannel.ForAddress("https://localhost:7212");
+            var user = GetUser();
+
+            using var channel = GrpcChannel.ForAddress("https://localhost:7212");
             var client = channel.CreateGrpcService<IChatService>();
 
-            var user = GetUser();
             var listenTask = Task.Run(async () =>
             {
                 await foreach (var message in client.UserJoin(user))
@@ -22,6 +23,9 @@ namespace GrpcChat.Client
             await client.UserInteract(GetClientMessages(user));
             await client.UserDisconect(user);
             await listenTask;
+
+            WriteReceivedMessage(new ChatMessage { Username = "Server", Content = "Você saiu da conversa, tecle 'enter' para fechar..." });
+            Console.Read();
         }
 
         private static void WriteReceivedMessage(ChatMessage? message)
