@@ -14,7 +14,7 @@ namespace GrpcChat.Server.Domain
         public async IAsyncEnumerable<ChatMessage?> ListenMessages()
         {
             foreach (var item in _messages.GetConsumingEnumerable())
-            {   
+            {
                 await Task.Delay(25);
                 yield return item;
             }

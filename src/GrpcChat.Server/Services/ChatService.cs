@@ -19,11 +19,13 @@ namespace GrpcChat.Server.Services
             }
         }
 
-        public async Task UserInteract(IAsyncEnumerable<ChatMessage> messages,
+        public async Task UserInteract(IAsyncEnumerable<Message> messages,
             CancellationToken cancellationToken = default)
         {
             await foreach (var message in messages)
-                chatRoom.Notify(message);
+            {
+                chatRoom.Notify((ChatMessage)message);
+            }
         }
 
         public async Task UserDisconect(User user, CancellationToken cancelationToken = default)

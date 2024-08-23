@@ -10,7 +10,7 @@ namespace GrpcChat.Client
         {
             var channel = GrpcChannel.ForAddress("https://localhost:7212");
             var client = channel.CreateGrpcService<IChatService>();
-                        
+
             var user = GetUser();
             var listenTask = Task.Run(async () =>
             {

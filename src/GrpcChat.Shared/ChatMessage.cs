@@ -3,12 +3,17 @@
 namespace GrpcChat.Shared
 {
     [ProtoContract]
-    public class ChatMessage
+    public class ChatMessage : Message
     {
         [ProtoMember(1)]
         public string? Username { get; set; }
+    }
 
-        [ProtoMember(2)]
+    [ProtoContract]
+    [ProtoInclude(2, typeof(ChatMessage))]
+    public class Message
+    {
+        [ProtoMember(1)]
         public string? Content { get; set; }
     }
 }

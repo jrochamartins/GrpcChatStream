@@ -21,7 +21,7 @@
                 }
                 catch (Exception ex)
                 {
-                    observer.OnError(ex);                    
+                    observer.OnError(ex);
                 }
             }
         }
