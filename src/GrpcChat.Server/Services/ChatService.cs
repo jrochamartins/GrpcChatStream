@@ -9,22 +9,25 @@ namespace GrpcChat.Server.Services
         public async IAsyncEnumerable<ChatMessage?> Connect(User user, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var client = new ChatClient(user.Username);
-            using var subscription = chatRoom.Subscribe(client);
+            using var _ = chatRoom.Subscribe(client);
+
             await foreach (var message in client.ListenMessages())
             {
                 if (client.Completed || cancellationToken.IsCancellationRequested)
                     yield break;
+
                 yield return message;
             }
         }
 
-        public async Task Interact(IAsyncEnumerable<Message> messages, CancellationToken cancellationToken = default)
+        public async Task Interact(IAsyncEnumerable<Message?> messages, CancellationToken cancellationToken = default)
         {
             await foreach (var message in messages)
             {
                 if (cancellationToken.IsCancellationRequested)
                     break;
-                chatRoom.Notify((ChatMessage)message);
+
+                chatRoom.Notify((ChatMessage?)message);
             }
         }
 

@@ -10,6 +10,18 @@ namespace GrpcChat.Shared
 
         public string Render() =>
             $"[{Created:HH:mm:ss}] {Username}: {Content}";
+
+        public static explicit operator ChatMessage?(string? content)
+        {
+            if (content == null)
+                return default;
+
+            return new ChatMessage()
+            {
+                Username = "Server",
+                Content = content,
+            };
+        }
     }
 
     [ProtoContract]

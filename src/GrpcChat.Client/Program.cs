@@ -29,15 +29,13 @@ namespace GrpcChat.Client
                     WriteMessage(message);
         }
 
-        private static void WriteMessage(string message) =>
-           WriteMessage(new ChatMessage { Username = "Server", Content = message });
+        private static void WriteMessage(string? message) =>
+           WriteMessage((ChatMessage?)message);
 
         private static void WriteMessage(ChatMessage? message)
         {
-            var defaultColor = Console.ForegroundColor;
-            Console.ForegroundColor = message?.Username == "Server" ? ConsoleColor.Yellow : ConsoleColor.Green;
+            using var _ = new ForecolorPicker(message?.Username == "Server" ? ConsoleColor.Yellow : ConsoleColor.Green);
             Console.WriteLine(message?.Render());
-            Console.ForegroundColor = defaultColor;
         }
 
         private static User GetUser()
@@ -66,32 +64,34 @@ namespace GrpcChat.Client
             };
         }
 
-        private static async IAsyncEnumerable<ChatMessage> GetClientMessages(User user)
+        private static async IAsyncEnumerable<ChatMessage?> GetClientMessages(User user)
         {
             do
             {
-                await Task.Delay(25);
-
-                var request = new ChatMessage
+                var request = Preview(new ChatMessage
                 {
                     Username = user.Username,
                     Content = Console.ReadLine()
-                };
+                });
 
-                PreviewSentMessage(request);
+                await Task.Delay(25);
 
-                if (request.Content?.Trim().ToLower() == "sair")
+                if (request?.Content?.Trim().ToLower() == "sair")
                     yield break;
 
                 yield return request;
             } while (true);
         }
 
-        private static void PreviewSentMessage(ChatMessage? message)
+        private static ChatMessage? Preview(ChatMessage? message)
         {
-            if (Console.CursorTop == 0) return;
+            if (Console.CursorTop == 0)
+                return message;
+
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             Console.WriteLine(message?.Render());
+
+            return message;
         }
     }
 }

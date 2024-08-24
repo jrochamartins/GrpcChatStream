@@ -8,7 +8,7 @@ namespace GrpcChat.Shared
         IAsyncEnumerable<ChatMessage?> Connect(User user,
             CancellationToken cancelationToken = default);
 
-        Task Interact(IAsyncEnumerable<Message> messages,
+        Task Interact(IAsyncEnumerable<Message?> messages,
            CancellationToken cancelationToken = default);
 
         Task Disconnect(User user,

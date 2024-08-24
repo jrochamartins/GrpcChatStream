@@ -8,6 +8,7 @@
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
+
             return new Unsubscriber<T>(_observers, observer);
         }
 

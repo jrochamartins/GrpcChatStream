@@ -4,11 +4,11 @@ using System.Collections.Concurrent;
 
 namespace GrpcChat.Server.Domain
 {
-    public class ChatClient(string? name = default) : EventObserver<ChatMessage>(name)
+    public class ChatClient(string? name = default) : EventObserver<ChatMessage?>(name)
     {
-        private readonly BlockingCollection<ChatMessage> _messages = [];
+        private readonly BlockingCollection<ChatMessage?> _messages = [];
 
-        public override void OnNext(ChatMessage value) =>
+        public override void OnNext(ChatMessage? value) =>
             _messages.TryAdd(value);
 
         public async IAsyncEnumerable<ChatMessage?> ListenMessages()
