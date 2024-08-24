@@ -6,31 +6,29 @@ namespace GrpcChat.Server.Services
 {
     public class ChatService(ChatRoom chatRoom) : IChatService
     {
-        public async IAsyncEnumerable<ChatMessage?> UserJoin(User user,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<ChatMessage?> Connect(User user, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var client = new ChatClient(user.Username);
             using var subscription = chatRoom.Subscribe(client);
             await foreach (var message in client.ListenMessages())
             {
-                if (client.Completed)
+                if (client.Completed || cancellationToken.IsCancellationRequested)
                     yield break;
                 yield return message;
             }
         }
 
-        public async Task UserInteract(IAsyncEnumerable<Message> messages,
-            CancellationToken cancellationToken = default)
+        public async Task Interact(IAsyncEnumerable<Message> messages, CancellationToken cancellationToken = default)
         {
             await foreach (var message in messages)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
                 chatRoom.Notify((ChatMessage)message);
             }
         }
 
-        public async ValueTask UserDisconect(User user, CancellationToken cancelationToken = default)
-        {
-            await Task.Run(() => chatRoom.EndTransmission(user.Username), cancelationToken);
-        }
+        public async Task Disconnect(User user, CancellationToken cancelationToken = default) =>
+            await Task.Run(() => chatRoom.EndTransmission(user), cancelationToken);
     }
 }

@@ -26,11 +26,11 @@
             }
         }
 
-        public void EndTransmission()
-        {
-            foreach (var observer in _observers)
-                observer.OnCompleted();
-            _observers.Clear();
-        }
+        //public void EndTransmission()
+        //{
+        //    foreach (var observer in _observers)
+        //        observer.OnCompleted();
+        //    _observers.Clear();
+        //}
     }
 }
